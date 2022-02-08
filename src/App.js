@@ -1,23 +1,39 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import { Gentleman } from './components/gentelman';
+import { Info } from './components/info';
+import { GENTLEMEN } from './models/gentlemen.data';
 
 function App() {
+  const [gentlemen, setGentlemen] = useState(GENTLEMEN);
+
+  const deleteGentleman = (gentleman) => {
+    setGentlemen(gentlemen.filter((item) => item.id !== gentleman.id));
+  };
+
+  const updateGentleman = (newGentleman) => {
+    setGentlemen(
+      gentlemen.map((item) =>
+        newGentleman.id === item.id ? newGentleman : item
+      )
+    );
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Info />
+      <ul className="gentlemen">
+        {gentlemen.map((gentleman, i) => {
+          return (
+            <Gentleman
+              key={i}
+              gentleman={gentleman}
+              deleteGentleman={deleteGentleman}
+              updateGentleman={updateGentleman}
+            />
+          );
+        })}
+      </ul>
     </div>
   );
 }
